@@ -3,7 +3,6 @@
 #include <stdint.h>
 
 #define CSB 10
-#define CE  11
 #define SDA 16
 #define SCL 17
 
@@ -28,6 +27,9 @@ void registerWrite(uint8_t address, uint16_t data)
 
 void registerRead(uint8_t address)
 {
+   //Read enable 
+    registerWrite(0x00,0x2218);
+    
     uint16_t data;
     digitalWrite(CSB,LOW);
     SPI.transfer(address | 0x80);
@@ -61,60 +63,52 @@ void loop()
       
    //Write RESET=1 in R0
    registerWrite(0x00,0x0002);
+   delay(10); 
+   //New config begins
 
-
-  //Read enable 
-  registerWrite(0x00,0x2218);
-  
-
-  
-    //R75: Channel divider, should be divided by 32
-    //Reset value of R75 is 0x0800
-    //So we need to write 0x09C0
-    registerWrite(0x4B,0x09C0);
-    registerRead(0x4B);
-
-   //R44: MASH_ORDER should be 3, By default it's 2
-   //Reset value is 0x08A2
-   registerWrite(0x2C,0x08A3);
-
-   //R34,R36: Divider value should be 80, By default 28
-   //R34 is 3 bit MSB we don't need that, R36 is 16 bit so we should write 0x00A0 to get 80
+   registerWrite(0x7D,0x2288);
+   delay(10);
+   registerWrite(0x72,0x7802);
+   delay(10);
+   registerWrite(0x4E,0x0001);
+   delay(10);
+   registerWrite(0x4B,0x0A40);
+   delay(10);
+   registerWrite(0x47,0x0081);
+   delay(10);
+   registerWrite(0x3A,0x9001);
+   delay(10);
+   registerWrite(0x39,0x0020);
+   delay(10);
+   registerWrite(0x34,0x0421);
+   delay(10);
+   registerWrite(0x2D,0xC61F);
+   delay(10);
+   registerWrite(0x2C,0x1FA3);
+   delay(10);
+   registerWrite(0x27,0x03E8);
+   delay(10);
+   registerWrite(0x26,0x0000);
+   delay(10);
+   registerWrite(0x25,0x0305);
+   delay(10);
    registerWrite(0x24,0x00A0);
+   delay(10);
+   registerWrite(0x1E,0x18A6);
+   delay(10);
+   registerWrite(0x1D,0x0000);
+   delay(10);
+   registerWrite(0X14,0x4848);
+   delay(10);
+   registerWrite(0x0E,0x1820);
+   delay(10);
+   registerWrite(0x0A,0x1278);
+   delay(10);
+   registerWrite(0x00,0x211C);
+   delay(10);
 
-   //R10: Multuplier should be 4x
-   //Reset value of R10 is 0x10F8
-   registerWrite(0x0A,0x1478);
-
-    //R0: FCAL_HPFD_ADJ should be 2, be default it's 1
-    //reset value is 0x221C
-    registerWrite(0x00,0x211C); //modified from 2310c to 211c
-       
-   //R9: Doubler we want in X1, so it should be disabled. By default it's disabled
-
-   //R12: PreR should be 1, By default it's 1
-
-   //R11: PreR should be 1, By default it's 1
-
-   //R14: CPG- Charge Pump Gain, We need 2500micro Amps. By default its 2500
-
-   //R42,R43: Fraction numerator should be 0,By default iit's zero
-
-   //R38,R39: Do not care, because numerator is 0
-
-   //R44: OUTA_PWR should be 8, By default it's 8
-
-   //R37: PFD_DLY_SEL should be 2, By default it's 2
-
-   //R40,R41: MESH seed should be 0x0000, by defult it's 0
-
-  //VCO calibration
-
-  //R0: FCAL_LPFD_ADJ should be 0, by default it's 0
-
- //R1: CAL_CLK_DIV should be 0,  by default it's 0
-
-  
+   //New config ends
+    
    SPI.end(); 
    while(1);
 
