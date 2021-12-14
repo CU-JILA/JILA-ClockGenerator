@@ -4,8 +4,8 @@
 
 #define CSB 10
 #define CE  11
-#define SDA 20
-#define SCL 21
+#define SDA 16
+#define SCL 17
 
 /*
  * @function: registerWrite()
@@ -26,14 +26,24 @@ void registerWrite(uint8_t address, uint16_t data)
      digitalWrite(CSB,HIGH);
 }
 
+void registerRead(uint8_t address)
+{
+    uint16_t data;
+    digitalWrite(CSB,LOW);
+    SPI.transfer(address | 0x80);
+    data = SPI.transfer(0x00);
+    data = (data << 8) | (SPI.transfer(0x00));
+    digitalWrite(CSB,HIGH);
+}
+
 
 void setup()
 {
     Serial.begin(9600);
     pinMode(CSB,OUTPUT);
     pinMode(CE,OUTPUT);
-    pinMode(SCL,OUTPUT);
-    pinMode(SDA,OUTPUT);
+    //pinMode(SCL,OUTPUT);
+    //pinMode(SDA,OUTPUT);
 }
 
 void loop() 
@@ -41,7 +51,7 @@ void loop()
 
     //Initial Power-on sequence
     //CE should be HIGH
-    digitalWrite(CE,HIGH);
+    //digitalWrite(CE,HIGH);
     //Ensure valid Reference clock is applied to OSCin
     delay(1);     //wait for more than 500 microseconds
     digitalWrite(CSB,HIGH);
@@ -49,14 +59,20 @@ void loop()
     SPI.begin();
     delay(1000);
       
-   //Write RESET=1 in R1
+   //Write RESET=1 in R0
    registerWrite(0x00,0x0002);
+
+
+  //Read enable 
+  registerWrite(0x00,0x2218);
+  
 
   
     //R75: Channel divider, should be divided by 32
     //Reset value of R75 is 0x0800
     //So we need to write 0x09C0
     registerWrite(0x4B,0x09C0);
+    registerRead(0x4B);
 
    //R44: MASH_ORDER should be 3, By default it's 2
    //Reset value is 0x08A2
@@ -71,8 +87,8 @@ void loop()
    registerWrite(0x0A,0x1478);
 
     //R0: FCAL_HPFD_ADJ should be 2, be default it's 1
-    //reset value is 0x221c
-    registerWrite(0x00,0x230C);
+    //reset value is 0x221C
+    registerWrite(0x00,0x211C); //modified from 2310c to 211c
        
    //R9: Doubler we want in X1, so it should be disabled. By default it's disabled
 
