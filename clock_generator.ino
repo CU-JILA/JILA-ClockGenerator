@@ -64,46 +64,90 @@ void loop()
    //Write RESET=1 in R0
    registerWrite(0x00,0x0002);
    delay(10); 
+     
    //New config begins
-
+     
+   //R124: Reset value is 0x0820  
    registerWrite(0x7D,0x2288);
    delay(10);
+     
+   //R114: Reset value is 0x7800
+   //FSK_MODE_SEL = FSK SPI  
    registerWrite(0x72,0x7802);
    delay(10);
+     
+   //R78: Reset value is 0x0064  
    registerWrite(0x4E,0x0001);
    delay(10);
+     
+   //R75: Reset value is 0x0800
+   //Divide by 64 -> CHDIV  
    registerWrite(0x4B,0x0A40);
    delay(10);
+     
+   //R71: Reset value is 0x0080  
    registerWrite(0x47,0x0081);
    delay(10);
+     
+   //R58: Reset value is 0x8001
+   //INPIN_LVL = Vin  
    registerWrite(0x3A,0x9001);
    delay(10);
+     
+   //R57: Reset value is 0x0000 
    registerWrite(0x39,0x0020);
    delay(10);
+     
+   //R52: Reset value is 0x0420  
    registerWrite(0x34,0x0421);
    delay(10);
+     
+   //R45: Reset value is 0xC608
+   //OUTB_PWR   
    registerWrite(0x2D,0xC61F);
    delay(10);
+     
+   //R44: Reset value is 0x08A2  
    registerWrite(0x2C,0x1FA3);
    delay(10);
+     
+   //R39: Reset value is 0xFFFF  
    registerWrite(0x27,0x03E8);
    delay(10);
+     
+   //R38: Reset value is 0xFFFF  
    registerWrite(0x26,0x0000);
    delay(10);
+     
+   //R37: Reset value is 0x0205  
    registerWrite(0x25,0x0305);
    delay(10);
+     
+   //R36: Reset value is 0x0028  
    registerWrite(0x24,0x00A0);
    delay(10);
+     
+   //R30: Reset value is 0x18C6  
    registerWrite(0x1E,0x18A6);
    delay(10);
+     
+   //R29: Reset value is 0x18C6  
    registerWrite(0x1D,0x0000);
    delay(10);
+     
+   //R20: Reset value is 0x3048  
    registerWrite(0X14,0x4848);
    delay(10);
+     
+   //R14: Reset value is 0x1840  
    registerWrite(0x0E,0x1820);
    delay(10);
+     
+   //R10: Reset value is 0x10F8  
    registerWrite(0x0A,0x1278);
    delay(10);
+     
+   //R0: Reset value is 0x221C 
    registerWrite(0x00,0x211C);
    delay(10);
 
